@@ -4,24 +4,33 @@ const User = db["User"];
 
 const insertData = async (
   data = {
-    name: "Haroon",
-    email: "haroon@qbatch.com",
-    age: 20,
+    name: "Ahmad",
+    email: "ahmad@qh.com",
+    age: 42,
     created_at: new Date(),
     updated_at: new Date(),
   }
 ) => {
-  await User.create(data)
+  User.create(data)
     .then((result) => {
-      console.log(result.get({ plain: true }));
+      console.log("My Result: ", result.get({ raw: true }));
     })
     .catch((err) => {
-      console.error(err);
+      // console.error(err);
+    });
+};
+
+const getData = async () => {
+  User.scope("old")
+    .findAll({ raw: true })
+    .then((result) => {
+      console.log(result);
     });
 };
 
 const main = async () => {
   await insertData();
+  // await getData();
 };
 
 main();

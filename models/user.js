@@ -1,5 +1,5 @@
 "use strict";
-const { Model } = require("sequelize");
+const { Model, Sequelize } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -32,8 +32,24 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "User",
       underscored: true,
       hooks: {
-        afterValidate: (user, options) => {
-          console.log(user);
+        beforeValidate: (user, options) => {
+          console.log("after validate");
+        },
+        validationFailed: (user, options, err) => {
+          console.log(err);
+          console.log("Validation Failed");
+        },
+      },
+      defaultScope: {
+        where: {
+          age: {
+            [Sequelize.Op.lte]: 25,
+          },
+        },
+      },
+      scopes: {
+        old: {
+          where: { age: { [Sequelize.Op.gte]: 40 } },
         },
       },
     }
